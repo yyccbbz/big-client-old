@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="rptAssetsBalance" >
+	<select id="findRptAssetsBalanceListByPage" parameterType="hashmap" resultType="com.evergrande.report.entity.RptAssetsBalance">
+		SELECT id, user_name, mobile_no, reg_date, assets_total, aum_time 
+		FROM rpt_assets_balance
+		<if test="search_context!=null and search_context!=''">
+			WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+		</if>
+		ORDER BY aum_time DESC
+		LIMIT #{beginIndex}, #{pageSize};
+	</select>
+	<select id="findRptAssetsBalanceTotalNum" resultType="integer">
+		SELECT COUNT(1) FROM rpt_assets_balance
+		<if test="search_context!=null and search_context!=''">
+			WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+		</if>
+	</select>
+	<select id="findAllRptAssetsBalance" parameterType="hashmap" resultType="com.evergrande.report.entity.RptAssetsBalance">
+		SELECT id, user_name, mobile_no, reg_date, assets_total, aum_time 
+		FROM rpt_assets_balance;
+	</select>
+</mapper>

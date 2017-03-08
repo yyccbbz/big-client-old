@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="assignUser">
+
+    <select id="findAssignUserListByPage" parameterType="hashmap" resultType="com.evergrande.report.entity.AssignUser">
+        SELECT id,user_name,mobile_no,reg_date,id_card_no,is_staff,assets,gender,age,birthday,invite_user,invite_user_mobile,invite_user_is_staff,create_ts,update_ts
+        FROM rpt_to_assigned_customers
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>
+        LIMIT #{beginIndex}, #{pageSize};
+    </select>
+
+    <select id="findAssignUserListTotalNum" resultType="integer">
+        SELECT COUNT(1) FROM rpt_to_assigned_customers
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>;
+    </select>
+
+    <select id="findAllAssignUser" parameterType="hashmap" resultType="com.evergrande.report.entity.AssignUser">
+        SELECT id,user_name,mobile_no,reg_date,id_card_no,is_staff,assets,gender,age,birthday,invite_user,invite_user_mobile,create_ts,update_ts
+        FROM rpt_to_assigned_customers;
+    </select>
+    <select id="findAssignUserByAUM" parameterType="hashmap" resultType="com.evergrande.report.entity.AssignUser">
+        SELECT id,user_name,mobile_no,reg_date,id_card_no,is_staff,assets,gender,age,birthday,invite_user,invite_user_mobile,create_ts,update_ts
+        FROM rpt_to_assigned_customers
+        WHERE assets >= 50000 AND 500000 > assets;
+    </select>
+
+
+</mapper>

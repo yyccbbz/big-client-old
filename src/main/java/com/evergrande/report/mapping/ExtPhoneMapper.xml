@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="extPhone">
+
+    <insert id="saveExtPhone" parameterType="hashmap">
+	    INSERT INTO `big_client`.`rpt_ext_phone` (
+		`mobile_no`,
+		`create_ts`,
+		`update_ts`
+		)
+		VALUES
+		(#{mobile_no}, now(), now());
+    </insert>
+
+	<delete id="deleteByMobile" parameterType="hashmap">
+		DELETE FROM rpt_ext_phone WHERE mobile_no = #{mobile_no};
+	</delete>
+
+	<delete id="deleteAllExtPhone">
+		DELETE FROM rpt_ext_phone;
+	</delete>
+
+
+
+</mapper>

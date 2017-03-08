@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="officialUser">
+
+    <select id="findOfficialUserListByPage" parameterType="hashmap" resultType="com.evergrande.report.entity.OfficialUser">
+        SELECT
+        id,
+        user_name,
+        mobile_no,
+        report_or_allot,
+        report_allot_date,
+        invest_adviser,
+        customer_ids,
+        create_ts,
+        update_ts
+        FROM
+        rpt_official_list
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>
+        LIMIT #{beginIndex}, #{pageSize};
+    </select>
+
+    <select id="findOfficialUserListTotalNum" resultType="integer">
+        SELECT COUNT(1) FROM rpt_official_list
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>;
+    </select>
+
+    <select id="findAllOfficialUser" parameterType="hashmap" resultType="com.evergrande.report.entity.OfficialUser">
+        SELECT
+        id,
+        user_name,
+        mobile_no,
+        report_or_allot,
+        report_allot_date,
+        invest_adviser,
+        customer_ids,
+        create_ts,
+        update_ts
+        FROM
+        rpt_official_list;
+    </select>
+
+    <select id="findOneUserByMobileNO" parameterType="hashmap" resultType="com.evergrande.report.entity.OfficialUser">
+        SELECT
+        id,
+        user_name,
+        mobile_no,
+        report_or_allot,
+        report_allot_date,
+        invest_adviser,
+        customer_ids,
+        create_ts,
+        update_ts
+        FROM
+        rpt_official_list
+        WHERE mobile_no = #{mobileNo};
+    </select>
+
+    <insert id="saveOneUser" parameterType="hashmap">
+        INSERT INTO rpt_official_list (`user_name`, `mobile_no`, `report_or_allot`, `report_allot_date`, `invest_adviser`, `customer_ids`, `create_ts`, `update_ts`)
+        VALUES (#{user_name}, #{mobile_no}, #{report_or_allot}, #{report_allot_date}, #{invest_adviser}, #{customer_ids}, now(), now());
+    </insert>
+    
+    <update id="modifyUserInfo" parameterType="hashmap">
+		UPDATE rpt_official_list
+		SET `user_name` = #{user_name}, 
+		`report_or_allot`=#{report_or_allot},
+		 `report_allot_date`=#{report_allot_date},
+		 `invest_adviser`=#{invest_adviser},
+		 `customer_ids`=#{customer_ids}, `update_ts`=now() 
+		WHERE
+			`id` = #{id};
+	</update>
+
+    <delete id="deleteUserById" parameterType="hashmap">
+        DELETE FROM rpt_official_list WHERE id = #{id};
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM rpt_official_list;
+    </delete>
+
+</mapper>

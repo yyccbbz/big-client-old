@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="rptSalesDetail" >
+	<select id="findRptSalesDetailListByPage" parameterType="hashmap" resultType="com.evergrande.report.entity.RptSalesDetail">
+		SELECT id, user_name, mobile_no, invite_user, rebate_expire_date, report_or_allot, report_allot_date, 
+			invest_adviser, customer_ind, basic_product_name, invest_amount, exist_assets, buy_date, product_date
+		FROM rpt_sales_detail
+		<where>
+			<if test="begin_buy_date!=null and begin_buy_date!=''">
+				AND buy_date &gt;= #{begin_buy_date}
+			</if>
+			<if test="end_buy_date!=null and end_buy_date!=''">
+				AND buy_date &lt;= #{end_buy_date}
+			</if>
+			<if test="search_context!=null and search_context!=''">
+				AND (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+			</if>
+		</where>
+		ORDER BY buy_date DESC
+		LIMIT #{beginIndex}, #{pageSize}
+	</select>
+	<select id="findRptSalesDetailTotalNum" resultType="integer">
+		SELECT COUNT(1) FROM rpt_sales_detail
+		<where>
+			<if test="begin_buy_date!=null and begin_buy_date!=''">
+				AND buy_date &gt;= #{begin_buy_date}
+			</if>
+			<if test="end_buy_date!=null and end_buy_date!=''">
+				AND buy_date &lt;= #{end_buy_date}
+			</if>
+			<if test="search_context!=null and search_context!=''">
+				AND (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+			</if>
+		</where>
+	</select>
+	<select id="findAllRptSalesDetailByBuyDate" parameterType="hashmap" resultType="com.evergrande.report.entity.RptSalesDetail">
+		SELECT id, user_name, mobile_no, invite_user, rebate_expire_date, report_or_allot, report_allot_date, 
+			invest_adviser, customer_ind, basic_product_name, invest_amount, exist_assets, buy_date, product_date
+		FROM rpt_sales_detail
+		<where>
+			<if test="begin_buy_date!=null and begin_buy_date!=''">
+				AND buy_date &gt;= #{begin_buy_date}
+			</if>
+			<if test="end_buy_date!=null and end_buy_date!=''">
+				AND buy_date &lt;= #{end_buy_date}
+			</if>
+		</where>
+		ORDER BY buy_date DESC
+	</select>
+</mapper>

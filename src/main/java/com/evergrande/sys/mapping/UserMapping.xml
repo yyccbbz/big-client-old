@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="user" >
+	<resultMap id="userResultMap" type="user" >
+    	<id column="user_id" property="user_id"/>
+    	<result column="user_pwd" property="user_pwd"/>
+    	<result column="user_nm" property="user_nm"/>
+    	<result column="user_real_nm" property="user_real_nm"/>
+    	<result column="role_id" property="role_id"/>
+    	<result column="create_id" property="create_id"/>
+    	<result column="create_ts" property="create_ts"/>
+    	<result column="update_id" property="update_id"/>
+    	<result column="update_ts" property="update_ts"/>
+  	</resultMap>
+  	<sql id="query_user_columns">SELECT user_id,user_nm,user_real_nm,role_id </sql>
+	<insert id="saveOneUser" parameterType="hashmap">
+		INSERT INTO sys_user (user_pwd,user_nm,user_real_nm,role_id,create_id,create_ts,update_id,update_ts)
+		VALUE (MD5(#{password}),#{username},#{realname},#{roleid},#{createid},now(),#{updateid},now());
+	</insert>
+	<delete id="deleteUserById" parameterType="hashmap">
+		DELETE FROM sys_user WHERE user_id = #{user_id};
+	</delete>
+	<update id="modifyUserInfo" parameterType="hashmap">
+		UPDATE sys_user SET user_real_nm = #{realname}, update_id = #{updateid}, update_ts= now() WHERE user_id = #{edit_user_id};;
+	</update>
+	<update id="modifyUserPwd" parameterType="hashmap">
+		UPDATE sys_user SET user_pwd = MD5(#{user_pwd}) WHERE user_id = #{user_id};
+	</update>
+	<update id="modifyUserRole" parameterType="hashmap">
+		UPDATE sys_user SET role_id = #{role_id} WHERE user_id = #{user_id};
+	</update>
+	<select id="findUserByUserId" parameterType="int" resultMap="userResultMap">
+		<include refid="query_user_columns"></include> FROM sys_user WHERE user_id=#{user_id};
+	</select>
+	<select id="checkUserExist" parameterType="hashmap" resultMap="userResultMap">
+		<include refid="query_user_columns"></include> FROM sys_user WHERE user_nm=#{username} AND user_pwd=MD5(#{password});
+	</select>
+	<select id="checkUserNameExist" parameterType="hashmap" resultType="integer">
+		SELECT COUNT(1) FROM sys_user WHERE user_nm=#{username};
+	</select>
+	<select id="findTotalNum" resultType="integer">
+		SELECT COUNT(1) FROM sys_user <if test="find_sys_admin != 1"> WHERE role_id != 1 </if>;
+	</select>
+	<select id="findUserListByPage" parameterType="hashmap" resultMap="userResultMap">
+		SELECT u.user_id,u.user_nm,u.user_real_nm, u.role_id,u.create_id,cu.user_real_nm create_name,u.create_ts,u.update_id,uu.user_real_nm update_name,u.update_ts
+		FROM sys_user u 
+		LEFT JOIN sys_user cu ON u.create_id = cu.user_id 
+		LEFT JOIN sys_user uu ON u.update_id = uu.user_id 
+		<if test="find_sys_admin != 1">
+			WHERE u.role_id != 1
+		</if>
+		<choose>
+			<when test="orderId!=null">
+				<choose>
+					<when test="orderId=='u.user_real_nm' || orderId=='create_name' || orderId=='update_name'">
+						ORDER BY convert(${orderId} USING gbk) COLLATE gbk_chinese_ci ${order_type} 
+					</when>
+					<otherwise>
+						ORDER BY ${orderId} ${order_type} 
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				ORDER BY u.user_id
+			</otherwise>
+		</choose>
+		LIMIT #{beginIndex}, #{pageSize};
+	</select>
+	<select id="findAllUser" resultMap="userResultMap">
+		SELECT user_id,user_nm,user_real_nm FROM sys_user ORDER BY user_id LIMIT 300;
+	</select>
+</mapper>

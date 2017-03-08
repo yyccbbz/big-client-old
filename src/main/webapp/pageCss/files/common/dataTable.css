@@ -1,0 +1,42 @@
+
+/*
+###############for Imported File Users View List ############################################################
+ */
+
+
+/*  ID 隐藏   */
+.td_col_0_id_hide {
+    width:0px;
+    display:none;
+}
+
+
+/* 别名 */
+.td_col_A_import_alias {
+    width:240px;
+}
+
+/* 描述  */
+.td_col_B_import_comments {
+    width:300px;
+}
+
+/* 用户数  */
+.td_col_C_import_user_count {
+    width:150px;
+}
+
+/* 导入时间   */
+.td_col_D_import_time {
+    width:200px;
+}
+
+/* 创建者 */
+.td_col_E_import_owner {
+    width:130px;
+}
+
+/* 操作   */
+.td_col_E_tag_op {
+    width:180px;
+}

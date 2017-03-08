@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="extUser">
+
+    <select id="findExtUserListByPage" parameterType="hashmap" resultType="com.evergrande.report.entity.ExtUser">
+        SELECT
+            id,
+            mobile_no,
+            user_name,
+            is_reg,
+            reg_date,
+            is_real_name,
+            is_tie_card,
+            is_trans,
+            scan_code_rec,
+            rebate_expire_date,
+            create_ts,
+            update_ts
+        FROM
+          rpt_external_customer
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>
+        LIMIT #{beginIndex}, #{pageSize};
+    </select>
+
+    <select id="findExtUserListTotalNum" resultType="integer">
+        SELECT COUNT(1) FROM rpt_external_customer
+        <if test="search_context!=null and search_context!=''">
+            WHERE (user_name like CONCAT('%','${search_context}','%' ) or mobile_no like CONCAT('%','${search_context}','%' ))
+        </if>;
+    </select>
+
+    <select id="findAllExtUser" parameterType="hashmap" resultType="com.evergrande.report.entity.ExtUser">
+        SELECT
+            id,
+            mobile_no,
+            user_name,
+            is_reg,
+            reg_date,
+            is_real_name,
+            is_tie_card,
+            is_trans,
+            scan_code_rec,
+            rebate_expire_date,
+            create_ts,
+            update_ts
+        FROM
+          rpt_external_customer;
+    </select>
+
+    <select id="findOneUserByMobileNO" parameterType="hashmap" resultType="com.evergrande.report.entity.ExtUser">
+        SELECT
+            id,
+            mobile_no,
+            user_name,
+            is_reg,
+            reg_date,
+            is_real_name,
+            is_tie_card,
+            is_trans,
+            scan_code_rec,
+            rebate_expire_date,
+            create_ts,
+            update_ts
+        FROM
+          rpt_external_customer
+        WHERE mobile_no = #{mobileNo};
+    </select>
+    
+    <select id="findOneUserByMobileId" parameterType="hashmap" resultType="com.evergrande.report.entity.ExtUser">
+        SELECT
+            id,
+            mobile_no,
+            user_name,
+            is_reg,
+            reg_date,
+            is_real_name,
+            is_tie_card,
+            is_trans,
+            scan_code_rec,
+            rebate_expire_date,
+            create_ts,
+            update_ts
+        FROM
+          rpt_external_customer
+        WHERE id = #{id};
+    </select>
+
+    <insert id="saveOneUser" parameterType="hashmap">
+        INSERT INTO rpt_external_customer ( `mobile_no`, `user_name`, `is_reg`, `reg_date`, `is_real_name`, `is_tie_card`, `is_trans`, `scan_code_rec`, `rebate_expire_date`, `create_ts`, `update_ts`)
+        VALUES ( #{mobile_no}, #{user_name}, #{is_reg}, #{reg_date}, #{is_real_name}, #{is_tie_card}, #{is_trans}, #{scan_code_rec}, #{rebate_expire_date}, now(), now());
+    </insert>
+
+    <delete id="deleteUserByMobile" parameterType="hashmap">
+        DELETE FROM rpt_external_customer WHERE mobile_no = #{mobile_no};
+    </delete>
+    
+    <delete id="deleteUserById" parameterType="hashmap">
+        DELETE FROM rpt_external_customer WHERE id = #{id};
+    </delete>
+
+	<update id="modifyUserInfo" parameterType="hashmap">
+		UPDATE rpt_external_customer
+		SET `user_name` = #{user_name},
+		 `is_reg` = #{is_reg},
+		 `reg_date` = #{reg_date},
+		 `is_real_name` = #{is_real_name},
+		 `is_tie_card` = #{is_tie_card},
+		 `is_trans` =  #{is_trans},
+		 `scan_code_rec` = #{scan_code_rec},
+		 `rebate_expire_date` = #{rebate_expire_date},
+		 `update_ts` = now()
+		WHERE
+			(`id` = #{edit_user_id});
+	</update>
+
+</mapper>
