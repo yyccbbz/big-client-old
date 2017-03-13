@@ -49,7 +49,7 @@ public class ExportServiceImpl implements ExportService {
 	@Override
 	public HSSFWorkbook exportSalesDetail(List<RptSalesDetail> list) {
 		String[] excelHeader = { "姓名", "手机号", "邀请有礼推荐人", "返利失效日期", "上报/分配", "上报/分配日期", "投资顾问", "客户标识", "基础产品名称", "投资金额",
-				"现有资产", "购买日期", "产品成立日期" };
+				"现有资产", "购买日期", "产品成立日期", "产品利率", "产品期限" };
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("sales_detail_report");
 		sheet.setDefaultColumnWidth(15);
@@ -82,6 +82,8 @@ public class ExportServiceImpl implements ExportService {
 			row.createCell(10).setCellValue(item.getExist_assets());
 			row.createCell(11).setCellValue(item.getFormat_buy_date());
 			row.createCell(12).setCellValue(item.getFormat_product_date());
+			row.createCell(13).setCellValue(item.getProduct_interest_rate());
+			row.createCell(14).setCellValue(item.getProduct_term());
 		}
 		return wb;
 	}
