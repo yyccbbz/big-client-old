@@ -6,7 +6,7 @@ import com.evergrande.report.entity.RptCurrentSalesDetail;
 import com.evergrande.report.entity.RptSalesDetail;
 import com.evergrande.report.service.ExportService;
 import com.evergrande.report.service.ReportService;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +52,7 @@ public class ReportController extends BaseController {
 	public void export_assets_balance(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, Object> paramMap = initRequestParam(request);
 		List<RptAssetsBalance> list = reportService.findAllRptAssetsBalance(paramMap);
-		HSSFWorkbook wb = exportService.export_assets_balance(list);
+		XSSFWorkbook wb = exportService.export_assets_balance(list);
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "attachment;filename=assets_balance_report.xls");
 		OutputStream ouputStream = response.getOutputStream();
@@ -121,7 +121,7 @@ public class ReportController extends BaseController {
 		map.put("begin_buy_date", begin_buy_date);
 		map.put("end_buy_date", end_buy_date);
 		List<RptSalesDetail> list = reportService.findAllRptSalesDetailByBuyDate(map);
-		HSSFWorkbook wb = exportService.exportSalesDetail(list);
+		XSSFWorkbook wb = exportService.exportSalesDetail(list);
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "attachment;filename=sales_detail_report.xls");
 		OutputStream ouputStream = response.getOutputStream();
@@ -188,7 +188,7 @@ public class ReportController extends BaseController {
 		map.put("begin_buy_date", begin_buy_date);
 		map.put("end_buy_date", end_buy_date);
 		List<RptCurrentSalesDetail> list = reportService.findAllRptCurrentSalesDetailByBuyDate(map);
-		HSSFWorkbook wb = exportService.exportCurrentSalesDetail(list);
+		XSSFWorkbook wb = exportService.exportCurrentSalesDetail(list);
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "attachment;filename=current_sales_detail_report.xls");
 		OutputStream ouputStream = response.getOutputStream();

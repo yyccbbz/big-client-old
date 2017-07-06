@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+.svn/
+big-client.iml
+src/main/big-client.iml
+src/test/
+target/
